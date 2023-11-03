@@ -9,6 +9,17 @@
 
 Microservice setup of chat app
 
+```
+- microservice 1 (API)
+    access point: localhost:4000
+
+- microservice 2 (Presence)
+    access point: localhost:6000
+
+- microservice 1 (Chat)
+    access point: localhost:7000
+```
+
 ## Installation
 
 ```bash
