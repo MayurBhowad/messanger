@@ -19,6 +19,7 @@ export class AppController {
   constructor(
     @Inject('AUTH_SERVICE') private readonly authService: ClientProxy,
     @Inject('PRESENCE_SERVICE') private readonly presenceService: ClientProxy,
+    @Inject('CHAT_SERVICE') private readonly chatService: ClientProxy,
   ) {}
 
   @Get('users')
@@ -115,6 +116,29 @@ export class AppController {
       {
         email,
         password,
+      },
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @UseInterceptors(UserInterceptor)
+  @Post('get/chat')
+  async getChat(
+    @Req() req: UserRequest,
+    @Body() body: { conversationId: number; last_key: number },
+  ) {
+    if (!req?.user) {
+      throw new BadRequestException();
+    }
+
+    return this.chatService.send(
+      {
+        cmd: 'get-chat',
+      },
+      {
+        userId: req.user.id,
+        conversationId: body.conversationId,
+        last_key: body.last_key,
       },
     );
   }

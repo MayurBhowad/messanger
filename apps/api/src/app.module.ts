@@ -11,6 +11,7 @@ import { AppController } from './app.controller';
       'PRESENCE_SERVICE',
       process.env.RABBITMQ_PRESENCE_QUEUE,
     ),
+    SharedModule.registerRmq('CHAT_SERVICE', process.env.RABBITMQ_CHAT_QUEUE),
   ],
   controllers: [AppController],
 })

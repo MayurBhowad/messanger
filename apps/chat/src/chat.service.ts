@@ -96,4 +96,38 @@ export class ChatService {
       conversation,
     });
   }
+
+  async getChat(userId: number, conversationId: number, skip: number) {
+    console.log('userID: ', userId);
+    console.log('skip: ', skip);
+
+    const user = await this.getUser(userId);
+
+    if (!user) return;
+
+    // const conversation = await this.conversationsRepository.findByCondition({
+    //   where: [{ id: conversationId }],
+    //   relations: ['users'],
+    // });
+
+    // if (!conversation) return;
+
+    const convv = await this.messagesRepository.findWithRelations({
+      where: { conversation: { id: conversationId } },
+      relations: ['user', 'conversation'],
+      loadRelationIds: true,
+      order: { createdAt: 'ASC' },
+      skip: skip || 0,
+      take: 20,
+    });
+    // if (!convv) return { status: true, data: [] };
+    console.log(convv);
+
+    // const userChat = convv.filter((conversation) => {
+    //   const userIds = conversation.conversation.id;
+    //   return userIds == conversationId;
+    // });
+
+    return { status: true, conversationId, data: convv };
+  }
 }
